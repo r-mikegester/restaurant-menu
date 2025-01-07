@@ -1,15 +1,15 @@
-# React + TypeScript + Vite + Tailwindcss Template by Mike Gester
+# Restaurante Padrino a Restaurant Menu Overview by Mike Gester
 
-This template provides minimal headstart setup to get React working in Vite with Typescript and Tailwindcss.
+This lorem ipsum dolor sit amet
 
 ## Getting Started or Running it Locally
  > Clone the project
 ```
-https://github.com/r-mikegester/react-ts-vite-tailwindcss-template.git
+https://github.com/r-mikegester/restaurant-menu.git
 ```
  > Go to project directory
 ```
-cd react-ts-vite-tailwindcss-template
+cd restaurant-menu
 ```
  > Install the dependencies
 ```npm
@@ -20,12 +20,12 @@ $ npm install
 $ npm run dev
 ```
 ## Deployment
-To view a Live Demo of this Template Repository just head to:
+To view a Live Demo of this Restaurant Menu Repository just head to:
 ```
-https://react-ts-vite-tailwindcss-template.vercel.app
+to be continued...
 ```
 ##
-- Editable Template startup codes just head to src/App.tsx to edit or removed this startup codes.
-- Optionally you can removed the svg assets and logos at the src/assets.
-- Lastly show some support by donating or just simply star this template repository it helps a lot, happy coding!
+- lorem
+- lorem
+- Lastly show some support by donating or just simply star this repository it helps a lot, happy coding!
 
