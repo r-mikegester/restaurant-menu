@@ -1,0 +1,65 @@
+export const products = [
+    {
+        id: 1,
+        title: "Cheeseburger",
+        description: "A delicious cheeseburger with all the fixings.",
+        price: "$8.99",
+        image: "https://via.placeholder.com/150",
+    },
+    {
+        id: 2,
+        title: "Pizza Margherita",
+        description: "Classic pizza with tomato, mozzarella, and basil.",
+        price: "$12.99",
+        image: "https://via.placeholder.com/150",
+    },
+    {
+        id: 3,
+        title: "Caesar Salad",
+        description: "Fresh romaine lettuce with Caesar dressing, croutons, and parmesan cheese.",
+        price: "$7.99",
+        image: "https://via.placeholder.com/150",
+    },
+    {
+        id: 4,
+        title: "Spaghetti Carbonara",
+        description: "Classic Italian pasta with eggs, cheese, pancetta, and pepper.",
+        price: "$10.99",
+        image: "https://via.placeholder.com/150",
+    },
+    {
+        id: 5,
+        title: "Grilled Salmon",
+        description: "Perfectly grilled salmon with a side of vegetables.",
+        price: "$15.99",
+        image: "https://via.placeholder.com/150",
+    },
+    {
+        id: 6,
+        title: "Grilled Salmon",
+        description: "Perfectly grilled salmon with a side of vegetables.",
+        price: "$15.99",
+        image: "https://via.placeholder.com/150",
+    },
+    {
+        id: 7,
+        title: "Grilled Salmon",
+        description: "Perfectly grilled salmon with a side of vegetables.",
+        price: "$15.99",
+        image: "https://via.placeholder.com/150",
+    },
+    {
+        id: 8,
+        title: "Grilled Salmon",
+        description: "Perfectly grilled salmon with a side of vegetables.",
+        price: "$15.99",
+        image: "https://via.placeholder.com/150",
+    },
+    {
+        id: 9,
+        title: "Grilled Salmon",
+        description: "Perfectly grilled salmon with a side of vegetables.",
+        price: "$15.99",
+        image: "https://via.placeholder.com/150",
+    }
+];
