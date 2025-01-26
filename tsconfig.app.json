@@ -2,17 +2,17 @@
   "compilerOptions": {
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "target": "ES2020",
+    "target": "ESNext",                      // Latest features for future-proofing
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"], // Latest DOM and ECMAScript features
     "module": "ESNext",
-    "skipLibCheck": true,
+    "skipLibCheck": true,                     // Can be set to false for stricter type checks
 
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    "isolatedModules": true,                  // Only keep if your bundler requires it
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
