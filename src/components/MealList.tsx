@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Meal } from "../shared/types";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { toast } from "react-toastify"; // Import toast
+import "react-toastify/dist/ReactToastify.css"; // Import toast CSS
 
 interface MealListProps {
   meals: Meal[];
@@ -9,11 +11,7 @@ interface MealListProps {
   onFavoriteChange: (mealId: string) => void;
 }
 
-const MealList: React.FC<MealListProps> = ({
-  meals,
-  favorites,
-  onFavoriteChange,
-}) => {
+const MealList: React.FC<MealListProps> = ({ meals, favorites, onFavoriteChange }) => {
   const [selectedMeal, setSelectedMeal] = useState<Meal | null>(null);
 
   return (
@@ -26,11 +24,11 @@ const MealList: React.FC<MealListProps> = ({
       >
         {meals.map((meal, index) => (
           <MealCard
-          key={`${meal.idMeal}-${index}`} // Combine meal ID with index for unique keys
+            key={`${meal.idMeal}-${index}`} // Ensure unique key
             meal={meal}
-            isFavorite={favorites.some((fav) => fav.idMeal === meal.idMeal)} // Check if meal is a favorite
+            isFavorite={favorites.some((fav) => fav.idMeal === meal.idMeal)}
             onClick={() => setSelectedMeal(meal)}
-            onFavoriteChange={onFavoriteChange} // Handle favorite toggle
+            onFavoriteChange={onFavoriteChange}
           />
         ))}
       </motion.ul>
@@ -84,22 +82,38 @@ function MealCard({
             </div>
             {/* Favorite button */}
             <button
-              className={`btn btn-circle border-2 border-transparent flex items-center justify-center rounded-full ${
-                isFavorite
-                  ? "bg-red-500 border-transparent text-white hover:text-red-700"
-                  : "bg-transparent text-gray-800 hover:text-red-500 hover:bg-transparent hover:border-2 hover:border-red-500"
-              }`}
+              className={`btn btn-circle border-2 border-transparent flex items-center justify-center rounded-full ${isFavorite ? "bg-red-500 border-transparent text-white hover:text-red-700" : "bg-transparent text-gray-800 hover:text-red-500 hover:bg-transparent hover:border-2 hover:border-red-500"
+                }`}
               onClick={(e) => {
-                e.stopPropagation(); // Prevent triggering parent onClick
-                onFavoriteChange(meal.idMeal); // Update favorite status
+                e.stopPropagation();
+                onFavoriteChange(meal.idMeal);
+
+                // Show toast notification
+                if (!isFavorite) {
+                  toast.success(`${meal.strMeal} added to favorites!`, {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
+                } else {
+                  toast.info(`${meal.strMeal} removed from favorites.`, {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
+                }
               }}
             >
               <Icon
-                icon={
-                  isFavorite
-                    ? "solar:heart-angle-bold"
-                    : "solar:heart-angle-broken"
-                }
+                icon={isFavorite ? "solar:heart-angle-bold" : "solar:heart-angle-broken"}
                 className="w-10 h-10"
               />
             </button>
@@ -163,14 +177,18 @@ function MealModal({
                   </motion.p>
                 </div>
               </div>
+              <motion.p
+                className="text-gray-900 font-medium text-[15px]"
+                layoutId={`description-${meal.idMeal}`}
+              >
+              </motion.p>
+
               <motion.div
                 tabIndex={0}
                 className="bg-white border-2 border-gray-300 shadow-inner collapse collapse-arrow drop-shadow-md"
               >
                 <input type="checkbox" />
-                <div className="text-xl font-medium text-gray-700 bg-gray-200 collapse-title">
-                  Description
-                </div>
+                <div className="text-xl font-medium text-gray-700 bg-gray-200 collapse-title">Description</div>
                 <div className="overflow-y-auto text-gray-600 bg-gray-50 collapse-content">
                   <div className="h-auto py-3 max-h-96">{meal.strInstructions}</div>
                 </div>
