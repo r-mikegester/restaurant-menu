@@ -1,19 +1,29 @@
 import { create } from "zustand";
-import { Meal } from "../types"; // Adjust the import based on your structure
+import { persist } from "zustand/middleware";
+import { Meal } from "../types";
 
 interface FavoritesState {
   favorites: Meal[];
   toggleFavorite: (meal: Meal) => void;
+  isFavorite: (mealId: string) => boolean;
 }
 
-export const useFavoritesStore = create<FavoritesState>((set) => ({
-  favorites: [],
-  toggleFavorite: (meal: Meal) => 
-    set((state: FavoritesState) => {
-      const exists = state.favorites.some((fav: Meal) => fav.idMeal === meal.idMeal);
-      const updatedFavorites = exists
-        ? state.favorites.filter((fav: Meal) => fav.idMeal !== meal.idMeal)
-        : [...state.favorites, meal];
-      return { favorites: updatedFavorites };
+export const useFavoritesStore = create<FavoritesState>()(
+  persist(
+    (set, get) => ({
+      favorites: [],
+      toggleFavorite: (meal) => {
+        const { favorites } = get();
+        const isAlreadyFavorite = favorites.some((fav) => fav.idMeal === meal.idMeal);
+
+        set({
+          favorites: isAlreadyFavorite
+            ? favorites.filter((fav) => fav.idMeal !== meal.idMeal)
+            : [...favorites, meal],
+        });
+      },
+      isFavorite: (mealId) => get().favorites.some((fav) => fav.idMeal === mealId),
     }),
-}));
+    { name: "favorites-storage" } // Key for localStorage
+  )
+);

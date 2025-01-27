@@ -1,18 +1,15 @@
-import { Category, Meal } from "../shared/types"; // Assuming you have the Meal type defined
-import SearchAndFilterHeader from "../components/SearchBar";
+import { useFavoritesStore } from "../shared/store/favoritesStore";
 import MealDisplay from "../components/DisplayMeals";
-
+import SearchAndFilterHeader from "../components/SearchBar";
+import { Category, Meal } from "../shared/types";
 
 interface SearchProps {
   searchQuery: string;
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   handleSearch: () => void;
   meals: Meal[];
-  favorites: Meal[];
   loading: boolean;
-  handleFavoriteChange: (mealId: string) => void;
-  categories: Category[]; // Ensure this is defined
-  handleCategorySelect?: (category: string) => void; // Add this line
+  categories: Category[];
 }
 
 const Search = ({
@@ -20,11 +17,11 @@ const Search = ({
   setSearchQuery,
   handleSearch,
   meals,
-  favorites,
   loading,
-  handleFavoriteChange,
   categories,
 }: SearchProps) => {
+  const { favorites, toggleFavorite } = useFavoritesStore();
+
   return (
     <div className="w-full h-screen pb-20 overflow-x-hidden overflow-y-scroll">
       <div className="p-4 text-4xl font-bold text-center text-gray-700 bg-white md:hidden">
@@ -43,7 +40,10 @@ const Search = ({
           meals={meals}
           favorites={favorites}
           loading={loading}
-          onFavoriteChange={handleFavoriteChange}
+          onFavoriteChange={(mealId) => {
+            const meal = meals.find((m) => m.idMeal === mealId);
+            if (meal) toggleFavorite(meal);
+          }}
           emptyMessage={meals.length ? "No meals loaded yet!" : "No meals found. Try another search!"}
         />
       </div>
