@@ -1,15 +1,17 @@
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
 import useTabStore from "../shared/store/tabStore"; // Import the Zustand store
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const BottomNav: React.FC = () => {
     const { activeTab, isAnimating, setActiveTab } = useTabStore(); // Get tab-related states and actions from Zustand
+    const navigate = useNavigate(); // Initialize useNavigate for navigation
 
     const views = [
-        { id: 0, name: "Home", icon: <Icon icon="hugeicons:home-03" width="24" height="24" /> },
-        { id: 1, name: "Search", icon: <Icon icon="hugeicons:search-02" width="24" height="24" /> },
-        { id: 2, name: "Favorites", icon: <Icon icon="hugeicons:service" width="24" height="24" /> },
-        { id: 3, name: "Misc", icon: <Icon icon="hugeicons:layer-add" width="24" height="24" /> },
+        { id: 0, name: "Home", path: "/", icon: <Icon icon="hugeicons:home-03" width="24" height="24" /> },
+        { id: 1, name: "Search", path: "/search", icon: <Icon icon="hugeicons:search-02" width="24" height="24" /> },
+        { id: 2, name: "Favorites", path: "/favorites", icon: <Icon icon="hugeicons:service" width="24" height="24" /> },
+        { id: 3, name: "Misc", path: "/misc", icon: <Icon icon="hugeicons:layer-add" width="24" height="24" /> },
     ];
 
     return (
@@ -24,7 +26,8 @@ const BottomNav: React.FC = () => {
                     }`}
                     onClick={() => {
                         if (!isAnimating) {
-                            setActiveTab(view.id); // Set the active tab using Zustand
+                            setActiveTab(view.id); // Update the active tab in Zustand
+                            navigate(view.path); // Navigate to the corresponding route
                         }
                     }}
                     disabled={isAnimating} // Disable buttons during animations
