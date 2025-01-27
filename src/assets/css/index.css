@@ -2,7 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-
+/* 
 body{
     background-color: #fff;
+} */
+.center {
+  @apply flex items-center justify-center;
 }

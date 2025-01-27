@@ -14,8 +14,7 @@ export default {
       },
     },
   },
-  plugins: [
-    // eslint-disable-next-line no-undef
-    require("daisyui"),
-  ],
+  darkMode: 'class', // Enable dark mode with class strategy
+  // eslint-disable-next-line no-undef
+  plugins: [require("tailwindcss-animate"), require("daisyui")],
 };

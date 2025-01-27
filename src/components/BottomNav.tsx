@@ -1,50 +1,49 @@
-import React from "react";
-import { NavigateFunction } from "react-router-dom";
-import { Icon } from "@iconify/react"; // Import Iconify
+import { motion } from "framer-motion";
+import { Icon } from "@iconify/react";
+import useTabStore from "../shared/store/tabStore"; // Import the Zustand store
 
-interface BottomNavProps {
-  activeIndex: number;
-  setActiveIndex: React.Dispatch<React.SetStateAction<number>>;
-  swipeableViews: {
-    path: string;
-    label: string;
-    icon: string; // Add an icon property for each view
-  }[];
-  navigate: NavigateFunction;
-}
+const BottomNav: React.FC = () => {
+    const { activeTab, isAnimating, setActiveTab } = useTabStore(); // Get tab-related states and actions from Zustand
 
-const BottomNav: React.FC<BottomNavProps> = ({
-  activeIndex,
-  setActiveIndex,
-  swipeableViews,
-  navigate,
-}) => {
-  return (
-    <div className="fixed bottom-0 w-full flex justify-around rounded-t-3xl bg-gray-100 border-2 border-gray-300 p-3 shadow-lg">
-      {swipeableViews.map((view, index) => (
-        <button
-          key={view.path}
-          className={`flex-1 text-center py-2 ${
-            activeIndex === index
-              ? "text-emerald-500 font-semibold"
-              : "text-gray-500"
-          }`}
-          onClick={() => {
-            setActiveIndex(index);
-            navigate(view.path);
-          }}
-        >
-          <Icon
-            icon={view.icon}
-            className={`text-2xl mx-auto ${
-              activeIndex === index ? "text-emerald-500" : "text-gray-500"
-            }`}
-          />
-          <span className="text-sm">{view.label}</span>
-        </button>
-      ))}
-    </div>
-  );
+    const views = [
+        { id: 0, name: "Home", icon: <Icon icon="hugeicons:home-03" width="24" height="24" /> },
+        { id: 1, name: "Search", icon: <Icon icon="hugeicons:search-02" width="24" height="24" /> },
+        { id: 2, name: "Favorites", icon: <Icon icon="hugeicons:service" width="24" height="24" /> },
+        { id: 3, name: "Misc", icon: <Icon icon="hugeicons:layer-add" width="24" height="24" /> },
+    ];
+
+    return (
+        <nav className="fixed left-0 right-0 flex items-center justify-around p-2 mx-auto bg-white border shadow-lg rounded-2xl min-w-80 w-fit md:w-80 drop-shadow-md bottom-3">
+            {views.map((view) => (
+                <button
+                    key={view.id}
+                    className={`flex flex-col w-full items-center transition-all duration-300 ${
+                        activeTab === view.id
+                            ? "text-emerald-500 bg-emerald-100 p-2 rounded-xl font-bold"
+                            : "p-2 text-gray-500"
+                    }`}
+                    onClick={() => {
+                        if (!isAnimating) {
+                            setActiveTab(view.id); // Set the active tab using Zustand
+                        }
+                    }}
+                    disabled={isAnimating} // Disable buttons during animations
+                >
+                    {view.icon}
+                    {activeTab === view.id && (
+                        <motion.span
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            className="mt-1 text-sm"
+                        >
+                            {view.name}
+                        </motion.span>
+                    )}
+                </button>
+            ))}
+        </nav>
+    );
 };
 
 export default BottomNav;
