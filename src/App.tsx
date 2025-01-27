@@ -10,7 +10,6 @@ import Misc from "./pages/Misc";
 import SplashScreen from "./pages/SplashScreen";
 import Onboarding from "./pages/Onboarding";
 import { useGreeting } from "./shared/hooks/useGreetings";
-import { useFavorites } from "./shared/hooks/useFavorites";
 import { useMeals } from "./shared/hooks/useMeals";
 import { useCategories } from "./shared/hooks/useCategories";
 
@@ -19,28 +18,17 @@ const App = () => {
   const greeting = useGreeting();
 
   // Meals and search functionality
-  const { meals, setMeals, searchMeals } = useMeals();
+  const { meals, searchMeals } = useMeals();
   const [searchQuery, setSearchQuery] = React.useState<string>("");
 
   const handleSearch = () => {
     searchMeals(searchQuery);
   };
 
-  // Favorites
-  const { favorites, toggleFavorite } = useFavorites(meals);
-
   // Categories
   const categories = useCategories();
-  const handleCategorySelect = (category: string | null) => {
-    if (category) {
-      const filteredMeals = meals.filter(
-        (meal) => meal.strCategory === category
-      );
-      setMeals(filteredMeals); // Assuming you expose a `setMeals` function from `useMeals`
-    } else {
-      searchMeals(""); // Reset to all meals when category is deselected
-    }
-  };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   // Loading state (if applicable)
   const loading = false; // Replace with your actual loading logic
 
@@ -53,12 +41,7 @@ const App = () => {
           <Route path="/" element={<Home greeting={greeting} />} />
 
           {/* Favorites Route */}
-          <Route
-            path="/favorites"
-            element={
-              <Favorites />
-            }
-          />
+          <Route path="/favorites" element={<Favorites />} />
 
           {/* Search Route */}
           <Route
@@ -69,11 +52,8 @@ const App = () => {
                 setSearchQuery={setSearchQuery}
                 handleSearch={handleSearch}
                 meals={meals}
-                favorites={favorites}
                 loading={loading}
-                handleFavoriteChange={toggleFavorite}
                 categories={categories}
-                handleCategorySelect={handleCategorySelect}
               />
             }
           />

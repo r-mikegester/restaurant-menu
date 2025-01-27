@@ -38,13 +38,17 @@ const Search = ({
       <div className="w-screen p-3 h-fit">
         <MealDisplay
           meals={meals}
-          favorites={favorites}
+          favorites={favorites} // Accessed directly from the store
           loading={loading}
           onFavoriteChange={(mealId) => {
             const meal = meals.find((m) => m.idMeal === mealId);
             if (meal) toggleFavorite(meal);
           }}
-          emptyMessage={meals.length ? "No meals loaded yet!" : "No meals found. Try another search!"}
+          emptyMessage={
+            meals.length
+              ? "No meals loaded yet!"
+              : "No meals found. Try another search!"
+          }
         />
       </div>
     </div>
