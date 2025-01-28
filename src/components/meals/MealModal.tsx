@@ -1,65 +1,60 @@
-import React from "react";
+"use client";
+
 import { motion, AnimatePresence } from "framer-motion";
+import type { Meal } from "../../shared/store/mealsStore";
 
-type Meal = {
-    idMeal: string;
-    strMeal: string;
-    strMealThumb: string;
-};
-
-type ModalProps = {
-    meal: Meal | null;
-    onClose: () => void;
-    addToFavorites: (meal: Meal) => void;
-};
-
-const MealModal: React.FC<ModalProps> = ({ meal, onClose, addToFavorites }) => {
+const MealModal = ({ meal, onClose, addToFavorites }: { meal: Meal | null; onClose: () => void; addToFavorites: (meal: Meal) => void; }) => {
     return (
         <AnimatePresence>
             {meal && (
                 <>
-                    {/* Modal Background */}
                     <motion.div
-                        className="fixed inset-0 bg-black/50 z-10"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
+                        className="fixed inset-0 flex items-center justify-center z-0 bg-secondary/50"
+                        transition={{ duration: 0.3, ease: "easeOut" }}
                         onClick={onClose}
                     />
-
-                    {/* Modal Content */}
                     <motion.div
-                        className="fixed inset-0 z-20 flex items-center justify-center"
-                        layoutId={`meal-${meal.idMeal}`}
+                        className="fixed inset-0 z-10 flex flex-col justify-center items-center"
+                        onClick={onClose}
                     >
-                        <div
-                            className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full"
-                            onClick={(e) => e.stopPropagation()}
+                        <motion.div
+                            className="p-4 w-fit relative overflow-hidden flex items-center justify-center flex-col bg-background rounded-3xl"
+                            layoutId={`meal-${meal.idMeal}`}
                         >
-                            <div className="relative w-full h-48 rounded overflow-hidden">
-                                <img
-                                    src={meal.strMealThumb}
-                                    alt={meal.strMeal}
-                                    className="w-full h-full object-cover"
-                                />
+                            <div className="max-w-xl mx-auto flex flex-col gap-4">
+                                <div className="flex gap-4">
+                                    <div className="min-w-20 h-20 rounded-3xl w-20 relative overflow-hidden">
+                                        <img
+                                            src={meal.strMealThumb}
+                                            alt={meal.strMeal}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    <div className="h-full items-start justify-center flex flex-col flex-1">
+                                        <div className="flex items-center justify-between w-full">
+                                            <div>
+                                                <motion.h2
+                                                    className="font-semibold text-xl text-secondary-foreground"
+                                                    layoutId={`title-${meal.idMeal}`}
+                                                >
+                                                    {meal.strMeal}
+                                                </motion.h2>
+                                            </div>
+                                            <button
+                                                className="py-1 px-3 rounded-full bg-blue-50 text-blue-500 text-sm font-semibold"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    addToFavorites(meal);
+                                                    onClose();
+                                                }}
+                                            >
+                                                Add to Favorites
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <motion.h2
-                                className="text-xl font-bold mt-4"
-                                layoutId={`title-${meal.idMeal}`}
-                            >
-                                {meal.strMeal}
-                            </motion.h2>
-                            <button
-                                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded w-full"
-                                onClick={() => {
-                                    addToFavorites(meal);
-                                    onClose();
-                                }}
-                            >
-                                Add to Favorites
-                            </button>
-                        </div>
+                        </motion.div>
                     </motion.div>
                 </>
             )}

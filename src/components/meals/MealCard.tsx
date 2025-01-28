@@ -1,13 +1,9 @@
-import React from "react";
+"use client";
+
 import { motion } from "framer-motion";
+import type { Meal } from "../../shared/store/mealsStore";
 
-type Meal = {
-    idMeal: string;
-    strMeal: string;
-    strMealThumb: string;
-};
-
-const MealCard: React.FC<{ meal: Meal; onClick: () => void }> = ({ meal, onClick }) => {
+const MealCard = ({ meal, onClick }: { meal: Meal; onClick: () => void }) => {
     return (
         <motion.li
             key={meal.idMeal}

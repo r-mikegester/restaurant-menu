@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { useMealStore } from "../../shared/store/mealsStore";
 import MealCard from "./MealCard";
 import MealModal from "./MealModal";
-import SearchBar from "../search/SearchBar";
 import type { Meal } from "../../shared/store/mealsStore"; // Import the Meal type
 
 const MealDisplay = () => {
@@ -22,9 +21,6 @@ const MealDisplay = () => {
     return (
         <div className="h-full center w-full relative p-4">
             <h1 className="text-2xl font-bold mb-4">Search Meals</h1>
-
-            {/* Search Bar Component */}
-            <SearchBar /> {/* No need for value or onChange props here */}
 
             <motion.ul
                 className="flex flex-col gap-4 justify-center items-center max-w-md w-full"
