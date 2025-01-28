@@ -1,86 +1,21 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
-import ErrorBoundary from "./components/ErrorBoundary";
-import RootLayout from "./pages/layout/RootLayout";
-import ToastNotifications from "./components/ToastNotifications";
-import Home from "./pages/Home";
-import Favorites from "./pages/Favorites";
-import Search from "./pages/Search";
-import Misc from "./pages/Misc";
-import SplashScreen from "./pages/SplashScreen";
-import Onboarding from "./pages/Onboarding";
-import { useGreeting } from "./shared/hooks/useGreetings";
-import { useMeals } from "./shared/hooks/useMeals";
-import { useCategories } from "./shared/hooks/useCategories";
-import { useFavorites } from "./shared/hooks/useFavorites";
+import AppRoutes from "./shared/routes/routes";
+import ToastNotif from "./components/utils/ToastNotif";
+import BottomNavbar from "./components/layout/BottomNav";
+import './assets/css/index.css';
+import ErrorBoundary from "./components/utils/ErrorBoundary";
 
-const App = () => {
-  // Greeting
-  const greeting = useGreeting();
-
-  // Meals and search functionality
-  const { meals, searchMeals } = useMeals();
-  const [searchQuery, setSearchQuery] = React.useState<string>("");
-
-  const handleSearch = () => {
-    searchMeals(searchQuery);
-  };
-
-  // Categories
-  const categories = useCategories();
-
-  // Favorites functionality
-  const { favorites, toggleFavorite } = useFavorites(meals);
-
-  // Loading state (if applicable)
-  const loading = false; // Replace with your actual loading logic
-
-  const handleFavoriteChange = (mealId: string) => {
-    toggleFavorite(mealId);
-    // Optional: Add toast or feedback for favorite changes
-  };
-
-  const handleCategorySelect = (category: string) => {
-    console.log(`Category selected: ${category}`);
-    // Optional: Add logic for filtering or fetching based on the category
-  };
-
+const App: React.FC = () => {
   return (
-    <ErrorBoundary>
-      <ToastNotifications />
-      <Routes>
-        <Route element={<RootLayout children={undefined} />}>
-          {/* Home Route */}
-          <Route path="/" element={<Home greeting={greeting} />} />
-
-          {/* Favorites Route */}
-          <Route path="/favorites" element={<Favorites />} />
-
-          {/* Search Route */}
-          <Route
-            path="/search"
-            element={
-              <Search
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                handleSearch={handleSearch}
-                meals={meals}
-                loading={loading}
-                favorites={favorites}
-                handleFavoriteChange={handleFavoriteChange}
-                categories={categories}
-                handleCategorySelect={handleCategorySelect}
-              />
-            }
-          />
-
-          {/* Other Routes */}
-          <Route path="/misc" element={<Misc />} />
-          <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/splash" element={<SplashScreen />} />
-        </Route>
-      </Routes>
-    </ErrorBoundary>
+    <div className="min-h-screen flex flex-col bg-gray-100">
+      <ErrorBoundary>
+        <div className="flex-grow">
+          <ToastNotif />
+          <AppRoutes />
+        </div>
+        <BottomNavbar />
+      </ErrorBoundary>
+    </div>
   );
 };
 

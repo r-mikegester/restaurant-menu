@@ -1,21 +1,15 @@
-import One from "../components/Carousel";
 
-interface HomeProps {
-  greeting: string;
-}
+const Home = () => {
+    
 
 
-const Home: React.FC<HomeProps> = ({ greeting }) => {
-  return (
-    <div className="flex flex-col items-center justify-center w-full h-full md:flex-row md:p-6 ">
-      <div className="flex items-center justify-center w-full pt-10 md:pt-0 md:h-full h-fit">
-        <h1 className="p-4 text-5xl font-bold text-left text-gray-700 md:text-7xl">{greeting}</h1>
-      </div>
-      <div className="w-full h-full">
-        <One />
-      </div>
-    </div>
-  );
+
+    return (
+        <div className="w-full h-full p-4">
+            <h1 className="text-3xl font-bold text-center text-gray-800">Welcome to the Restaurant Menu</h1>
+
+        </div>
+    );
 };
 
 export default Home;

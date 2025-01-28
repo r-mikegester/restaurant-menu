@@ -1,34 +1,39 @@
-import { useFavoritesStore } from "../shared/store/favoritesStore";
-import MealDisplay from "../components/DisplayMeals";
+import React from "react";
+import { useMealStore } from "../shared/store/mealsStore";
 
-const Favorites = () => {
-  const { favorites, toggleFavorite } = useFavoritesStore();
+const Favorites: React.FC = () => {
+    const { favorites, removeFromFavorites } = useMealStore();
 
-  return (
-    <div className="w-full pb-20 overflow-x-hidden overflow-y-auto">
-      <div className="p-4 text-4xl font-bold text-center text-gray-700 bg-white">
-        <h1>Favorites</h1>
-      </div>
-      <div className="w-screen h-screen p-3">
-        {favorites.length > 0 ? (
-          <MealDisplay
-            meals={favorites}
-            favorites={favorites}
-            loading={false}
-            onFavoriteChange={(mealId) => {
-              const meal = favorites.find((fav) => fav.idMeal === mealId);
-              if (meal) toggleFavorite(meal);
-            }}
-            emptyMessage="No favorite meals added yet!"
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full text-xl font-medium text-gray-500">
-            No favorite meals yet! Add some to see them here.
-          </div>
-        )}
-      </div>
-    </div>
-  );
+    return (
+        <div className="p-4">
+            <h1 className="text-2xl font-bold mb-4">Favorite Meals</h1>
+            {favorites.length === 0 ? (
+                <p className="text-gray-500">No favorites yet.</p>
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    {favorites.map((meal) => (
+                        <div
+                            key={meal.idMeal}
+                            className="border rounded shadow p-2 flex flex-col items-center"
+                        >
+                            <img
+                                src={meal.strMealThumb}
+                                alt={meal.strMeal}
+                                className="w-full h-32 object-cover rounded"
+                            />
+                            <h2 className="text-lg font-semibold mt-2">{meal.strMeal}</h2>
+                            <button
+                                onClick={() => removeFromFavorites(meal.idMeal)}
+                                className="mt-2 bg-red-500 text-white px-4 py-2 rounded"
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
 };
 
 export default Favorites;
