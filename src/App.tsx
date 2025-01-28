@@ -12,6 +12,7 @@ import Onboarding from "./pages/Onboarding";
 import { useGreeting } from "./shared/hooks/useGreetings";
 import { useMeals } from "./shared/hooks/useMeals";
 import { useCategories } from "./shared/hooks/useCategories";
+import { useFavorites } from "./shared/hooks/useFavorites";
 
 const App = () => {
   // Greeting
@@ -27,10 +28,22 @@ const App = () => {
 
   // Categories
   const categories = useCategories();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+  // Favorites functionality
+  const { favorites, toggleFavorite } = useFavorites(meals);
 
   // Loading state (if applicable)
   const loading = false; // Replace with your actual loading logic
+
+  const handleFavoriteChange = (mealId: string) => {
+    toggleFavorite(mealId);
+    // Optional: Add toast or feedback for favorite changes
+  };
+
+  const handleCategorySelect = (category: string) => {
+    console.log(`Category selected: ${category}`);
+    // Optional: Add logic for filtering or fetching based on the category
+  };
 
   return (
     <ErrorBoundary>
@@ -53,7 +66,10 @@ const App = () => {
                 handleSearch={handleSearch}
                 meals={meals}
                 loading={loading}
+                favorites={favorites}
+                handleFavoriteChange={handleFavoriteChange}
                 categories={categories}
+                handleCategorySelect={handleCategorySelect}
               />
             }
           />

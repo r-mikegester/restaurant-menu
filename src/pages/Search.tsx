@@ -7,9 +7,12 @@ interface SearchProps {
   searchQuery: string;
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   handleSearch: () => void;
+  favorites: Meal[];
   meals: Meal[];
   loading: boolean;
   categories: Category[];
+  handleFavoriteChange: (mealId: string) => void;
+  handleCategorySelect: (category: string) => void; // Add this line
 }
 
 const Search = ({
