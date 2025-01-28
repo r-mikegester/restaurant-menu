@@ -3,21 +3,30 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useMealStore } from "../../shared/store/mealsStore"; // Import the Zustand store
 
+interface Meal {
+  idMeal: string;
+  strMeal: string;
+  strMealThumb: string;
+}
+
 const Carousel = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [direction, setDirection] = useState(0);
     const { meals, fetchRandomMeal } = useMealStore(); // Access meals and the fetchRandomMeal function from Zustand
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [limitedMeals, setLimitedMeals] = useState<Meal[]>([]); // State for limiting the meals to 10
 
     // Fetch random meals on mount
     useEffect(() => {
         const fetchMeals = async () => {
             await fetchRandomMeal(); // Fetch random meals from the store
+            // Limit meals to 10
+            setLimitedMeals(meals.slice(0, 10)); 
             setLoading(false);
         };
         fetchMeals();
-    }, [fetchRandomMeal]);
+    }, [fetchRandomMeal, meals]); // Re-fetch if meals state changes
 
     const variants = {
         enter: (direction: number) => ({
@@ -36,12 +45,12 @@ const Carousel = () => {
 
     const handlePrev = () => {
         setDirection(-1);
-        setCurrentIndex((prevIndex) => (prevIndex - 1 + meals.length) % meals.length);
+        setCurrentIndex((prevIndex) => (prevIndex - 1 + limitedMeals.length) % limitedMeals.length);
     };
 
     const handleNext = () => {
         setDirection(1);
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % meals.length);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % limitedMeals.length);
     };
 
     return (
@@ -62,7 +71,7 @@ const Carousel = () => {
                     </div>
                 ) : (
                     <AnimatePresence initial={false} custom={direction}>
-                        {meals.length > 0 && (
+                        {limitedMeals.length > 0 && (
                             <motion.div
                                 key={currentIndex}
                                 custom={direction}
@@ -77,21 +86,21 @@ const Carousel = () => {
                             >
                                 {/* Image */}
                                 <img
-                                    src={meals[currentIndex]?.strMealThumb}
-                                    alt={meals[currentIndex]?.strMeal}
+                                    src={limitedMeals[currentIndex]?.strMealThumb}
+                                    alt={limitedMeals[currentIndex]?.strMeal}
                                     className="object-cover object-top w-full h-full"
                                 />
                                 {/* Title Overlay */}
-                                <div className="absolute px-4 py-2 rounded-lg bg-gray-900/50 glass top-5 left-5">
+                                <div className="absolute px-4 py-2 rounded-lg bg-gray-900/50 glass top-5 md:left-5 inset-x-auto">
                                     <h3 className="text-lg font-semibold text-white">
-                                        {meals[currentIndex]?.strMeal}
+                                        {limitedMeals[currentIndex]?.strMeal}
                                     </h3>
                                 </div>
                             </motion.div>
                         )}
                         {/* Indicators */}
                         <div className="absolute bottom-0 left-0 right-0 flex items-center h-10 gap-1 mx-auto w-fit">
-                            {Array.from({ length: meals.length }).map((_, index) => (
+                            {Array.from({ length: limitedMeals.length }).map((_, index) => (
                                 <motion.div
                                     key={index}
                                     animate={{
