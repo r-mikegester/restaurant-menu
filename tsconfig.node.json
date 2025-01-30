@@ -2,9 +2,11 @@
   "compilerOptions": {
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "skipLibCheck": true,
+    "target": "ESNext",                       // Latest ECMAScript features
+    "lib": ["ESNext"],                        // Latest standard library for Node.js
+    "skipLibCheck": true,                     // Can be set to false for stricter type checks
     "module": "ESNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "Node",               // Standard Node.js module resolution
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "noEmit": true
