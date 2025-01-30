@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import Home from "../../pages/Home";
 import Search from "../../pages/Search";
 import Favorites from "../../pages/Favorites";
-import Misc from "../../pages/Misc";
 
 const AppRoutes = () => {
     return (
@@ -10,7 +9,6 @@ const AppRoutes = () => {
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
             <Route path="/favorites" element={<Favorites />} />
-            <Route path="/misc" element={<Misc />} />
         </Routes>
     );
 };

@@ -12,7 +12,7 @@ interface Meal {
 const Carousel = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [direction, setDirection] = useState(0);
-    const { meals, fetchRandomMeal } = useMealStore(); // Access meals and the fetchRandomMeal function from Zustand
+    const { meals, fetchRandomMeals } = useMealStore(); // Access meals and the fetchRandomMeal function from Zustand
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(true);
     const [limitedMeals, setLimitedMeals] = useState<Meal[]>([]); // State for limiting the meals to 10
@@ -20,13 +20,13 @@ const Carousel = () => {
     // Fetch random meals on mount
     useEffect(() => {
         const fetchMeals = async () => {
-            await fetchRandomMeal(); // Fetch random meals from the store
+            await fetchRandomMeals(); // Fetch random meals from the store
             // Limit meals to 10
             setLimitedMeals(meals.slice(0, 10)); 
             setLoading(false);
         };
         fetchMeals();
-    }, [fetchRandomMeal, meals]); // Re-fetch if meals state changes
+    }, [fetchRandomMeals, meals]); // Re-fetch if meals state changes
 
     const variants = {
         enter: (direction: number) => ({

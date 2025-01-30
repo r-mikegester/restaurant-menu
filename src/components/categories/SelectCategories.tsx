@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useMealStore } from "../../shared/store/mealsStore";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface Category {
     idCategory: string;
@@ -10,9 +11,29 @@ interface Category {
     strCategoryDescription: string;
 }
 
+// Icons for each category
+const categoryIcons: Record<string, string> = {
+    "Beef": "mdi:cow",
+    "Chicken": "fluent-emoji-high-contrast:chicken",
+    "Dessert": "mdi:cake",
+    "Vegetarian": "carbon:fruit-bowl",
+    "Seafood": "streamline:shrimp",
+    "Pasta": "icon-park-outline:noodles",
+    "Salad": "fluent:bowl-salad-24-regular",
+    "Breakfast": "fluent-mdl2:breakfast",
+    "Starter": "lucide-lab:bowl-chopsticks",
+    "Lamb": "tabler:meat",
+    "Goat": "fluent-emoji-high-contrast:goat",
+    "Pork": "streamline:pork-meat",
+    "Miscellaneous": "fluent:food-24-regular",
+    "Side": "mingcute:dish-cover-line",
+    "Vegan": "akar-icons:radish",
+};
+
 const SelectCategories: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
-    const { fetchMealsByCategory } = useMealStore();
+    const [loading, setLoading] = useState(true);
+    const { fetchMealsByCategory, resetCategory, selectedCategory } = useMealStore();
 
     // Fetch available categories from the API
     useEffect(() => {
@@ -22,9 +43,11 @@ const SelectCategories: React.FC = () => {
                     "https://www.themealdb.com/api/json/v1/1/categories.php"
                 );
                 const data = await response.json();
-                setCategories(data.categories); // Set the categories as a list of Category objects
+                setCategories(data.categories);
             } catch (error) {
                 console.error("Error fetching categories:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -32,28 +55,50 @@ const SelectCategories: React.FC = () => {
     }, []);
 
     const handleCategoryChange = async (category: string) => {
-        if (category) {
-            await fetchMealsByCategory(category);
-        }
+        await fetchMealsByCategory(category);
     };
 
     return (
-        <div className="mb-4">
-            <label htmlFor="categories" className="block text-sm font-medium text-gray-700">
-                Select a Category:
+        <div className="mb-4 flex flex-col p-4 md:flex-row justify-between items-center w-full">
+            <label htmlFor="categories" className="block text-3xl text-gray-700 my-5 font-semibold">
+                Select a Meal <br className="hidden md:block" /> Category:
             </label>
-            <select
-                id="categories"
-                onChange={(e) => handleCategoryChange(e.target.value)}
-                className="w-full p-2 border rounded"
-            >
-                <option value="">-- Choose a Category --</option>
-                {categories.map((category) => (
-                    <option key={category.idCategory} value={category.strCategory}>
-                        {category.strCategory}
-                    </option>
-                ))}
-            </select>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 justify-center items-center">
+                {loading
+                    ? Array.from({ length: 15 }).map((_, index) => (
+                        <div
+                            key={index}
+                            className="flex items-center justify-center gap-4 px-3 w-40 bg-emerald-100 rounded-lg animate-pulse btn-sm"
+                        >
+                            <div className=" ">
+                                <Icon icon="eos-icons:three-dots-loading" className="text-2xl text-emerald-700" />
+                            </div>
+                        </div>
+                    ))
+                    : categories.map((category) => (
+                        <button
+                            key={category.idCategory}
+                            onClick={() => handleCategoryChange(category.strCategory)}
+                            className={`btn btn-sm bg-emerald-100 glass text-emerald-700 rounded-lg hover:bg-emerald-700 hover:text-white transition-all w-40 flex flex-col items-center justify-center ${selectedCategory === category.strCategory ? "bg-emerald-700 text-white" : ""
+                                }`}
+                        >
+                            <Icon
+                                icon={categoryIcons[category.strCategory] || "mdi:fast-food"}
+                                className="text-2xl mb-1"
+                            />
+                            <span>{category.strCategory}</span>
+                        </button>
+                    ))}
+                {selectedCategory && (
+                    <button
+                        onClick={resetCategory}
+                        className="btn btn-sm bg-emerald-100 glass text-emerald-700 rounded-lg hover:bg-emerald-700 hover:text-white transition-all w-40 flex flex-col items-center justify-center"
+                    >
+                        <Icon icon="mdi:refresh" className="text-2xl mb-1" />
+                        <span>Reset Category</span>
+                    </button>
+                )}
+            </div>
         </div>
     );
 };
