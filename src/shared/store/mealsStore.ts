@@ -45,24 +45,17 @@ export const useMealStore = create<MealState>((set, get) => ({
         set({ loading: true, error: null });
         try {
             const mealsArray: Meal[] = [];
-
-
             for (let i = 0; i < 20; i++) {
                 const response = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
                 const data = await response.json();
                 const randomMeal = data.meals[0];
-
-
                 randomMeal.price = parseFloat((Math.random() * (30 - 10) + 10).toFixed(2));
-
                 mealsArray.push(randomMeal);
             }
-
-
             set({ meals: mealsArray, loading: false });
         } catch (error) {
             set({ loading: false, error: "Error fetching random meals." });
-            console.error("Error fetching random meals:", error);
+            toast.error("Error fetching random meals.");
         }
     },
 
@@ -71,16 +64,14 @@ export const useMealStore = create<MealState>((set, get) => ({
         try {
             const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
             const data = await response.json();
-
             const mealsWithPrices = data.meals.map((meal: Meal) => ({
                 ...meal,
                 price: parseFloat((Math.random() * (30 - 10) + 10).toFixed(2)),
             }));
-
             set({ meals: mealsWithPrices, selectedCategory: category, loading: false });
         } catch (error) {
             set({ loading: false, error: `Error fetching meals for category ${category}` });
-            console.error(`Error fetching meals for category ${category}:`, error);
+            toast.error(`Error fetching meals for category ${category}`);
         }
     },
 
@@ -89,16 +80,19 @@ export const useMealStore = create<MealState>((set, get) => ({
         try {
             const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`);
             const data = await response.json();
-
-            const mealsWithPrices = (data.meals || []).map((meal: Meal) => ({
-                ...meal,
-                price: parseFloat((Math.random() * (30 - 10) + 10).toFixed(2)),
-            }));
-
-            set({ meals: mealsWithPrices, loading: false });
+            if (data.meals) {
+                const mealsWithPrices = data.meals.map((meal: Meal) => ({
+                    ...meal,
+                    price: parseFloat((Math.random() * (30 - 10) + 10).toFixed(2)),
+                }));
+                set({ meals: mealsWithPrices, loading: false });
+            } else {
+                set({ meals: [], loading: false });
+                toast.info(`No meals found for "${name}"`);
+            }
         } catch (error) {
             set({ loading: false, error: `Error fetching meals by name "${name}"` });
-            console.error(`Error fetching meals by name "${name}":`, error);
+            toast.error(`Error fetching meals by name "${name}"`);
         }
     },
 
@@ -122,12 +116,13 @@ export const useMealStore = create<MealState>((set, get) => ({
 
     removeFromFavorites: (mealId) =>
         set((state) => {
+            const mealToRemove = state.favorites.find((meal) => meal.idMeal === mealId);
             const updatedFavorites = state.favorites.filter((meal) => meal.idMeal !== mealId);
 
-            if (updatedFavorites.length === state.favorites.length) {
+            if (!mealToRemove) {
                 toast.error("This meal was not found in favorites!");
             } else {
-                toast.success(`this "${name}" added to favorites`);
+                toast.success(`"${mealToRemove.strMeal}" removed from favorites!`);
             }
 
             return {
