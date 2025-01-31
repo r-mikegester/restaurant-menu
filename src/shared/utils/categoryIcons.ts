@@ -1,0 +1,17 @@
+export const categoryIcons: Record<string, string> = {
+    "Beef": "mdi:cow",
+    "Chicken": "fluent-emoji-high-contrast:chicken",
+    "Dessert": "mdi:cake",
+    "Vegetarian": "carbon:fruit-bowl",
+    "Seafood": "streamline:shrimp",
+    "Pasta": "icon-park-outline:noodles",
+    "Salad": "fluent:bowl-salad-24-regular",
+    "Breakfast": "fluent-mdl2:breakfast",
+    "Starter": "lucide-lab:bowl-chopsticks",
+    "Lamb": "tabler:meat",
+    "Goat": "fluent-emoji-high-contrast:goat",
+    "Pork": "streamline:pork-meat",
+    "Miscellaneous": "fluent:food-24-regular",
+    "Side": "mingcute:dish-cover-line",
+    "Vegan": "akar-icons:radish",
+};

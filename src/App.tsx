@@ -7,7 +7,7 @@ import ErrorBoundary from "./components/utils/ErrorBoundary";
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
+    <div className="min-h-svh flex flex-col bg-gray-100">
       <ErrorBoundary>
         <div className="flex-grow">
           <ToastNotif />

@@ -1,5 +1,3 @@
-"use client";
-
 import { motion, AnimatePresence } from "framer-motion";
 import type { Meal } from "../../shared/store/mealsStore";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -17,7 +15,7 @@ const MealModal = ({
     const [isCollapsed, setIsCollapsed] = useState(false);
     const contentRef = useRef<HTMLDivElement>(null);
 
-    // Collapse toggle
+
     const toggleCollapse = () => {
         setIsCollapsed((prev) => !prev);
     };
@@ -39,7 +37,7 @@ const MealModal = ({
                     <motion.div
                         className="relative flex flex-col items-center justify-center max-h-screen p-4 m-4 overflow-hidden bg-white w-fit rounded-3xl"
                         layoutId={`meal-${meal.idMeal}`}
-                        onClick={(e) => e.stopPropagation()} // Prevent modal click from triggering close
+                        onClick={(e) => e.stopPropagation()}
                     >
                         <div className="mx-auto overflow-y-auto md:max-h-screen md:max-w-3xl max-w-96 h-fit w-fit">
                             <div className="grid w-full h-full grid-cols-1 md:grid-cols-12 grid-rows-12 gap-4 overflow-hidden">
@@ -66,7 +64,7 @@ const MealModal = ({
                                         <img
                                             src={meal.strMealThumb}
                                             alt={meal.strMeal}
-                                            className="rounded-none hidden w-full h-full md:flex" // Rotate the image on collapse toggle
+                                            className="rounded-none hidden w-full h-full md:flex"
                                         />
                                     </div>
                                 </div>
@@ -80,7 +78,7 @@ const MealModal = ({
                                             <img
                                                 src={meal.strMealThumb}
                                                 alt={meal.strMeal}
-                                                className={`transition-transform object-contain md:hidden duration-300 rounded-2xl ${isCollapsed ? "" : ""}`} // Rotate the image on collapse toggle
+                                                className={`transition-transform object-contain md:hidden duration-300 rounded-2xl ${isCollapsed ? "" : ""}`}
                                             />
 
                                             <button

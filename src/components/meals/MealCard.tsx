@@ -12,10 +12,10 @@ const MealCard = ({
 }: {
     meal: Meal;
     onClick: () => void;
-    removeFromFavorites?: (mealId: string) => void; // <-- Make it optional\
+    removeFromFavorites?: (mealId: string) => void; // <-- Make it optional
     addToFavorites?: (meal: Meal) => void;
 }) => {
-    const { favorites} = useMealStore();
+    const { favorites } = useMealStore();
     const isFavorite = favorites.some((fav) => fav.idMeal === meal.idMeal);
 
     return (
@@ -25,7 +25,7 @@ const MealCard = ({
             layoutId={`meal-${meal.idMeal}`}
             onClick={onClick}
         >
-            <div className="flex items-center gap-6 h-fit border-2 border-gray-300 btn hover:bg-emerald-100 hover:border-emerald-700 shadow-md bg-white rounded-2xl p-2">
+            <div className="flex items-center gap-6 h-fit border-2 border-gray-300 btn list-none hover:bg-emerald-100 hover:border-emerald-700 shadow-md bg-white rounded-2xl p-2">
                 <div className="min-w-20 h-20 rounded-xl w-20 relative overflow-hidden">
                     <img
                         src={meal.strMealThumb}
@@ -48,35 +48,35 @@ const MealCard = ({
                             </motion.p>
                         </div>
 
-                        {/* Favorite Button */}
-                        <button
-                            className={`btn btn-circle rounded-full border-transparent transition-all 
-                                ${isFavorite ? "bg-red-100 text-red-700" : "bg-transparent hover:bg-emerald-100 hover:text-emerald-700"}
-                            `}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                if (!isFavorite) {
-                                    addToFavorites?.(meal);
-                                }
-                            }}
-                            disabled={isFavorite}
-                        >
-                            <Icon
-                                icon={isFavorite ? "solar:heart-bold" : "solar:heart-angle-linear"}
-                                className="w-10 h-10"
-                            />
-                        </button>
+                        {/* Show Favorite Button ONLY IF it's NOT in Favorites Page */}
+                        {!removeFromFavorites && (
+                            <button
+                                className={`btn btn-circle rounded-full border-transparent transition-all 
+                                    ${isFavorite ? "bg-red-100 text-red-700" : "bg-transparent hover:bg-emerald-100 hover:text-emerald-700"}`}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (!isFavorite) {
+                                        addToFavorites?.(meal);
+                                    }
+                                }}
+                            >
+                                <Icon
+                                    icon={isFavorite ? "solar:heart-angle-bold" : "solar:heart-angle-linear"}
+                                    className="w-10 h-10 text-red-500"
+                                />
+                            </button>
+                        )}
 
                         {/* Remove Button (Only in Favorites Page) */}
                         {removeFromFavorites && (
                             <button
-                                className="btn btn-circle text-red-600 bg-red-100 hover:bg-red-700 hover:text-white"
+                                className="btn btn-circle text-red-600 border-none bg-red-100 hover:bg-red-700 hover:text-white"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     removeFromFavorites(meal.idMeal);
                                 }}
                             >
-                                <Icon icon="mdi:trash-can" className="size-7" />
+                                <Icon icon="hugeicons:delete-01" className="size-7" />
                             </button>
                         )}
                     </div>

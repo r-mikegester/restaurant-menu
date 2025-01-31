@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { Meal, useMealStore } from "../shared/store/mealsStore";
 import SearchBar from "../components/search/SearchBar";
@@ -23,7 +21,6 @@ const Search = () => {
         fetchInitialMeal();
     }, [fetchRandomMeals, setLoading]);
 
-    // Function to trigger search with loading state
     const triggerSearch = async () => {
         setLoading(true);
         await fetchRandomMeals();
