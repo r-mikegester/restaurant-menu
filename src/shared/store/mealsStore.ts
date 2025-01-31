@@ -18,9 +18,9 @@ interface MealState {
     meals: Meal[];
     favorites: Meal[];
     searchQuery: string;
-    selectedCategory: string | null;  // Track selected category
-    loading: boolean;  // Add loading state
-    error: string | null;  // Add error state
+    selectedCategory: string | null;
+    loading: boolean;
+    error: string | null;
     fetchRandomMeals: () => void;
     fetchMealsByCategory: (category: string) => Promise<void>;
     fetchMealsByName: (name: string) => Promise<void>;
@@ -28,37 +28,37 @@ interface MealState {
     addToFavorites: (meal: Meal) => void;
     removeFromFavorites: (mealId: string) => void;
     filterMeals: () => Meal[];
-    resetCategory: () => void;  // Method to reset category and fetch random meals
-    setLoading: (loading: boolean) => void;  // Set loading state
-    setError: (error: string | null) => void;  // Set error state
+    resetCategory: () => void;
+    setLoading: (loading: boolean) => void;
+    setError: (error: string | null) => void;
 }
 
 export const useMealStore = create<MealState>((set, get) => ({
     meals: [],
     favorites: [],
     searchQuery: "",
-    selectedCategory: null,  // Initial state for selectedCategory
-    loading: false,  // Default loading state
-    error: null,  // Default error state
+    selectedCategory: null,
+    loading: false,
+    error: null,
 
     fetchRandomMeals: async () => {
-        set({ loading: true, error: null });  // Set loading to true and reset error
+        set({ loading: true, error: null });
         try {
-            const mealsArray: Meal[] = []; // Array to hold the 20 random meals
+            const mealsArray: Meal[] = [];
 
-            // Fetch 20 random meals
+
             for (let i = 0; i < 20; i++) {
                 const response = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
                 const data = await response.json();
                 const randomMeal = data.meals[0];
 
-                // Assign random price to the meal
+
                 randomMeal.price = parseFloat((Math.random() * (30 - 10) + 10).toFixed(2));
 
                 mealsArray.push(randomMeal);
             }
 
-            // Update the state with the 20 fetched meals
+
             set({ meals: mealsArray, loading: false });
         } catch (error) {
             set({ loading: false, error: "Error fetching random meals." });
@@ -67,7 +67,7 @@ export const useMealStore = create<MealState>((set, get) => ({
     },
 
     fetchMealsByCategory: async (category) => {
-        set({ loading: true, error: null });  // Set loading to true and reset error
+        set({ loading: true, error: null });
         try {
             const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
             const data = await response.json();
@@ -85,7 +85,7 @@ export const useMealStore = create<MealState>((set, get) => ({
     },
 
     fetchMealsByName: async (name) => {
-        set({ loading: true, error: null });  // Set loading to true and reset error
+        set({ loading: true, error: null });
         try {
             const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`);
             const data = await response.json();
@@ -123,11 +123,11 @@ export const useMealStore = create<MealState>((set, get) => ({
     removeFromFavorites: (mealId) =>
         set((state) => {
             const updatedFavorites = state.favorites.filter((meal) => meal.idMeal !== mealId);
-            
+
             if (updatedFavorites.length === state.favorites.length) {
                 toast.error("This meal was not found in favorites!");
             } else {
-                toast.success("Removed from favorites");
+                toast.success(`this "${name}" added to favorites`);
             }
 
             return {
@@ -143,8 +143,8 @@ export const useMealStore = create<MealState>((set, get) => ({
     },
 
     resetCategory: async () => {
-        set({ selectedCategory: null, meals: [] });  // Reset selectedCategory and meals
-        await get().fetchRandomMeals();  // Fetch random meals after reset
+        set({ selectedCategory: null, meals: [] });
+        await get().fetchRandomMeals();
         toast.success("Category reset successfully!");
     },
 
