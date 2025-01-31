@@ -1,4 +1,3 @@
-
 # Kumpadre: Restaurant Menu Overview
 
 A modern web application to explore meals, search for recipes, and manage a list of favorite meals. Built with React, Zustand for state management, and the MealDB API to fetch meal data.
