@@ -5,7 +5,7 @@ A modern web application to explore meals, search for recipes, and manage a list
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](src/assets/img/kumpadre.png)
 
 
 
