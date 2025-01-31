@@ -1,32 +1,32 @@
 import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useMealStore } from "../../shared/store/mealsStore"; // Import the Zustand store
+import { useMealStore } from "../../shared/store/mealsStore"; 
 
 interface Meal {
-  idMeal: string;
-  strMeal: string;
-  strMealThumb: string;
+    idMeal: string;
+    strMeal: string;
+    strMealThumb: string;
 }
 
 const Carousel = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [direction, setDirection] = useState(0);
-    const { meals, fetchRandomMeals } = useMealStore(); // Access meals and the fetchRandomMeal function from Zustand
+    const { meals, fetchRandomMeals } = useMealStore();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(true);
-    const [limitedMeals, setLimitedMeals] = useState<Meal[]>([]); // State for limiting the meals to 10
+    const [limitedMeals, setLimitedMeals] = useState<Meal[]>([]); 
 
-    // Fetch random meals on mount
+    
     useEffect(() => {
         const fetchMeals = async () => {
-            await fetchRandomMeals(); // Fetch random meals from the store
-            // Limit meals to 10
-            setLimitedMeals(meals.slice(0, 10)); 
+            await fetchRandomMeals(); 
+           
+            setLimitedMeals(meals.slice(0, 10));
             setLoading(false);
         };
         fetchMeals();
-    }, [fetchRandomMeals, meals]); // Re-fetch if meals state changes
+    }, [fetchRandomMeals, meals]); 
 
     const variants = {
         enter: (direction: number) => ({
@@ -65,7 +65,7 @@ const Carousel = () => {
                 className="relative flex items-center justify-center w-full h-full mx-auto overflow-hidden border-4 border-gray-700 rounded-3xl text-white/90"
             >
                 {loading ? (
-                    // Skeleton Loading State
+                    
                     <div className="absolute flex items-center justify-center w-full h-full bg-gray-700 skeleton">
                         <div className="absolute w-40 h-10 bg-gray-500 rounded-lg skeleton left-5 top-5" />
                     </div>
