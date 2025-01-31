@@ -5,15 +5,15 @@ const ToastNotif = () => {
     return (
         <ToastContainer
             position="top-right"
-            autoClose={3000}
+            autoClose={1000}
             hideProgressBar={false}
-            newestOnTop={false}
+            newestOnTop={true}
             closeOnClick
             rtl={false}
             pauseOnFocusLoss
             draggable
             pauseOnHover
-            theme="light" // Can be "light", "dark", or "colored"
+            theme="light"
         />
     );
 };
