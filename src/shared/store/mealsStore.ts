@@ -21,6 +21,7 @@ interface MealState {
     selectedCategory: string | null;
     loading: boolean;
     error: string | null;
+    progressToastId: string | number | null;
     fetchRandomMeals: () => void;
     fetchMealsByCategory: (category: string) => Promise<void>;
     fetchMealsByName: (name: string) => Promise<void>;
@@ -40,6 +41,7 @@ export const useMealStore = create<MealState>((set, get) => ({
     selectedCategory: null,
     loading: false,
     error: null,
+    progressToastId: null, // Keep track of the toast ID for progress updates
 
     fetchRandomMeals: async () => {
         set({ loading: true, error: null });
@@ -61,40 +63,105 @@ export const useMealStore = create<MealState>((set, get) => ({
 
     fetchMealsByCategory: async (category) => {
         set({ loading: true, error: null });
+    
         try {
+            console.log(`🔍 Fetching meals for category: "${category}"`);
+            
+            // Fetch meals by category (returns only partial meal data)
             const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
             const data = await response.json();
-            const mealsWithPrices = data.meals.map((meal: Meal) => ({
-                ...meal,
-                price: parseFloat((Math.random() * (30 - 10) + 10).toFixed(2)),
-            }));
-            set({ meals: mealsWithPrices, selectedCategory: category, loading: false });
+    
+            if (!data.meals) {
+                throw new Error(`No meals found for category: ${category}`);
+            }
+    
+            // Fetch full details for each meal using lookup.php?i=
+            const detailedMeals = await Promise.all(
+                data.meals.map(async (meal: { idMeal: string }) => {  // 🔹 Explicitly define type here
+                    const detailsResponse = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`);
+                    const detailsData = await detailsResponse.json();
+                    const fullMeal = detailsData.meals[0];
+    
+                    return {
+                        ...fullMeal,
+                        price: parseFloat((Math.random() * (30 - 10) + 10).toFixed(2)), // Add random price
+                    };
+                })
+            );
+    
+            set({ meals: detailedMeals, selectedCategory: category, loading: false });
+            toast.success(`Meals for ${category} fetched successfully!`);
+    
         } catch (error) {
             set({ loading: false, error: `Error fetching meals for category ${category}` });
             toast.error(`Error fetching meals for category ${category}`);
         }
     },
 
+       // Fetch meals by name with progress tracking
     fetchMealsByName: async (name) => {
-        set({ loading: true, error: null });
-        try {
-            const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`);
-            const data = await response.json();
-            if (data.meals) {
-                const mealsWithPrices = data.meals.map((meal: Meal) => ({
-                    ...meal,
-                    price: parseFloat((Math.random() * (30 - 10) + 10).toFixed(2)),
-                }));
-                set({ meals: mealsWithPrices, loading: false });
-            } else {
-                set({ meals: [], loading: false });
-                toast.info(`No meals found for "${name}"`);
-            }
-        } catch (error) {
-            set({ loading: false, error: `Error fetching meals by name "${name}"` });
-            toast.error(`Error fetching meals by name "${name}"`);
+    set({ loading: true, error: null });
+
+    // Create a loading toast and store the toastId
+    const progressToastId = toast.loading("Fetching meals... 0%", {
+        progress: 0,
+        position: "top-center",
+    });
+    set({ progressToastId });
+
+    try {
+        const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`);
+        const data = await response.json();
+
+        if (data.meals) {
+            const mealsWithPrices = data.meals.map((meal: Meal) => ({
+                ...meal,
+                price: parseFloat((Math.random() * (30 - 10) + 10).toFixed(2)),
+            }));
+            set({ meals: mealsWithPrices });
+
+            // Simulate progress update (you can adjust this based on actual meal count)
+            let progress = 10;
+            const interval = setInterval(() => {
+                progress += 10;
+                toast.update(progressToastId, {
+                    render: `Fetching meals... ${progress}%`,
+                    progress: progress / 100,
+                });
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    toast.update(progressToastId, {
+                        render: "Meals fetched successfully!",
+                        progress: 1, // Completed progress
+                        type: "success",
+                        autoClose: 3000,
+                    });
+                }
+            }, 500); // Update every 500ms
+        } else {
+            set({ meals: [] });
+            toast.info(`No meals found for "${name}"`);
+            toast.update(progressToastId, {
+                render: "No meals found.",
+                progress: 1,
+                type: "info",
+                autoClose: 3000,
+            });
         }
-    },
+    } catch (error) {
+        set({ loading: false, error: `Error fetching meals by name "${name}"` });
+        toast.error(`Error fetching meals by name "${name}"`);
+        toast.update(progressToastId, {
+            render: "Error fetching meals.",
+            progress: 1,
+            type: "error",
+            autoClose: 3000,
+        });
+    } finally {
+        set({ loading: false });
+    }
+},
 
     setSearchQuery: (query) => set({ searchQuery: query }),
 

@@ -34,11 +34,11 @@ const Search = () => {
 
             {/* Loading Skeleton */}
             {loading && (
-                <div className="grid grid-cols-1 md:grid-cols-3 p-3 gap-4 justify-center items-center max-w-full w-full animate-pulse">
-                    {Array.from({ length: 15 }, (_, index) => (
+                <div className="grid items-center justify-center w-full max-w-full grid-cols-1 gap-4 p-3 md:grid-cols-3 animate-pulse">
+                    {Array.from({ length: 50 }, (_, index) => (
                         <div
                             key={index}
-                            className="h-20 w-full rounded-2xl bg-gray-400 animate-pulse"
+                            className="w-full h-20 bg-gray-400 rounded-2xl animate-pulse"
                         ></div>
                     ))}
                 </div>
@@ -47,7 +47,7 @@ const Search = () => {
             {/* Meal Cards */}
             {!loading && (
                 <motion.ul
-                    className="grid grid-cols-1 grid-flow-dense md:grid-cols-3 p-3 gap-4 justify-center items-center max-w-full w-full"
+                    className="grid items-center justify-center w-full max-w-full grid-cols-1 gap-4 p-3 grid-flow-dense md:grid-cols-3"
                     layout
                     transition={{ duration: 0.5, ease: "easeInOut" }}
                 >
@@ -61,7 +61,7 @@ const Search = () => {
                             />
                         ))
                     ) : error ? (
-                        <div className="w-screen h-fit py-20 px-10 flex justify-center items-center">
+                        <div className="flex items-center justify-center w-screen px-10 py-20 h-fit">
                             <div className="flex flex-col items-center justify-center space-y-4">
                                 <Icon icon="material-symbols:no-food-outline-rounded" className="w-40 h-40" />
                                 <h1 className="text-3xl font-normal text-center">
@@ -70,7 +70,7 @@ const Search = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className="w-screen h-fit py-20 px-10 flex justify-center items-center">
+                        <div className="flex items-center justify-center w-screen px-10 py-20 h-fit">
                             <div className="flex flex-col items-center justify-center space-y-4">
                                 <Icon icon="material-symbols:no-food-outline-rounded" className="w-40 h-40" />
                                 <h1 className="text-3xl font-normal text-center">
