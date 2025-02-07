@@ -29,7 +29,7 @@ A modern web application to explore meals, search for recipes, and manage a list
 
 ## Demo
 
-https://restaurant-menuv2.vercel.app/
+https://kumpadre.vercel.app/
 
 ## Setup Instructions
 
